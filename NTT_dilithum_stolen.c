@@ -85,7 +85,8 @@ void multiply_mod(int32_t a[N], int32_t b[N], int32_t c[N])
 
 
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     int32_t a[N] = {0,0,0,0,0,0,0,0};
     int32_t s[N] = {0,0,0,0,0,0,0,50};
 
@@ -96,26 +97,56 @@ int main(int argc, char **argv) {
     //fprintf(fptr, "Some text");
 
     double t;
-    unsigned int aux;
+    uint32_t aux_start, aux_end;
+    double results[Q][ITERATIONS];
+    int32_t n[Q] = {60, 83, 35, 62, 5, 12, 43, 45, 64, 73, 53, 44, 2, 29, 7, 85, 25, 94, 23, 91, 58, 47, 31, 40, 15, 66, 56, 37, 51, 88, 78, 32, 19, 76, 46, 82, 54, 63, 13, 49, 74, 50, 81, 89, 8, 67, 18, 38, 16, 80, 48, 3, 79, 14, 22, 55, 20, 24, 1, 68, 71, 72, 87, 57, 84, 70, 26, 69, 27, 59, 4, 77, 11, 96, 52, 34, 33, 86, 6, 0, 65, 28, 92, 75, 21, 9, 30, 90, 61, 41, 42, 39, 93, 17, 95, 10, 36};
+    int32_t random_sum = 0;
 
-    for (int j = 0; j < 97; j++)
+
+    for (int i = 0; i < ITERATIONS; i++)
     {
-        a[N-1] = j;
-        //fprintf(fptr, "%d, ", j);
-        for (int i = 0; i < ITERATIONS; i++)
+
+        for (int j = 0; j < 97; j++)
         {
+
+            a[N-1] = n[j];
+            // fprintf(fptr, "%d,", n[j]);
+
             _mm_lfence();
-            uint64_t start = __rdtsc();
+            uint64_t start = __rdtscp(&aux_start);
+            _mm_lfence();
             multiply_mod(a, s, c);
-            uint64_t end = __rdtscp(&aux);
             _mm_lfence();
-            t = (double)(end - start);
-            if(i+1 == ITERATIONS)
-                fprintf(fptr, "%f\n", t);
+            uint64_t end = __rdtscp(&aux_end);
+            _mm_lfence();
+            results[n[j]][i] = (double)(end - start);
+            // t = (double)(end - start);
+            // if(i+1 == ITERATIONS)
+            //     fprintf(fptr, "%f\n", t);
+            // else
+            //     fprintf(fptr, "%f,", t);
+            int r = rand() % 20;
+            if (r & 1)
+            {
+                random_sum += r;
+            }
             else
-                fprintf(fptr, "%f,", t);
+            {
+                random_sum -= r;
+            }
+
         }
-        //fprintf(fptr, "\n");
+    }
+
+    for (int i=0; i<Q; i++)
+    {
+        for (int j=0; j<ITERATIONS; j++)
+        {
+            if (j == ITERATIONS - 1)
+                fprintf(fptr, "%f\n", results[i][j]);
+            else
+                fprintf(fptr, "%f,", results[i][j]);
+        }
     }
 
     fclose(fptr);

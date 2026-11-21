@@ -7,7 +7,7 @@ def find_jumps_for_given_Q(Q, refresh = 0):
     if not os.path.isfile(f"./Q_tables/{Q}_Q.csv") or refresh == 1:
         with open(f"./Q_tables/{Q}_Q.csv", "wb") as f:
             for a in range(Q):
-                a_copy = 2*a
+                a_copy = a
                 for j in range(Q-1):
                     if a_copy > Q:
                         f.write(b'1,')
@@ -23,14 +23,19 @@ def find_jumps_for_given_Q(Q, refresh = 0):
 
 def get_differences_from_c_data(filename):
     df = pd.read_csv('statistic_cycle_measurement.csv', header=None)
+    # df = df.sort_values(by=df.columns[0])
+
+    # df.drop(columns=df.columns[0], inplace=True)
     cols = df.columns
     for col in cols:
         df[col] = df[col].astype(float)
 
+
     average = df.median(axis=1)
     print(average)
     differences = np.diff(average.to_numpy())
-    return differences, 0, max(differences), average
+
+    return differences, min(differences), max(differences), average
 
 def create_jumps_profile(averages, minimum, maximum):
     profile = []
@@ -41,16 +46,34 @@ def create_jumps_profile(averages, minimum, maximum):
             profile.append(0)
     return profile
 
+def pff(tab, jumps):
+    '''
+    Find the best matching array from jumps
+    '''
+    score_dict = {i:0 for i in range(len(jumps))}
+    for i in range(len(tab)):
+        for j in range(len(jumps)):
+            cos = jumps.iloc[j][i]
+            if tab[i] == cos:
+                score_dict[j] += 1
+
+    print(f'Nasz super tajny fspułczynnik: {max(score_dict, key=score_dict.get)}')
+
+
+
 pd.options.display.max_rows = 999
 pd.options.display.max_columns = 999
 Q = 97
 jumps_df = find_jumps_for_given_Q(Q)
-differences, min_diff, max_diff, av = get_differences_from_c_data('statistic_cycle_measurement.csv')
+differences, min_diff, max_diff, av= get_differences_from_c_data('statistic_cycle_measurement.csv')
 print(differences, min_diff, max_diff)
 profile = create_jumps_profile(differences, min_diff, max_diff)
 print(profile)
 result = jumps_df[jumps_df.eq(profile).all(axis=1)]
 print(result)
+
+pff(profile, jumps_df)
+
 
 import matplotlib.pyplot as plt
 
@@ -62,8 +85,8 @@ plt.title("Wykres średnich wartości")
 plt.grid(True)
 plt.show()
 
-
 plt.scatter(range(len(differences)), differences, s=90)
+plt.scatter(range(Q-1), (jumps_df.iloc[50]+0.1)*100, s=80, color="orange")
 
 plt.xlabel("Numer pomiaru")
 plt.ylabel("Średnia różnica")
