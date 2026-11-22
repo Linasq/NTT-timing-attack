@@ -13,7 +13,7 @@ W tym celu kolejne wartości $i$ potrzebne w wielomianie $a_i$ wybieramy z tabli
 
 ## Analiza danych
 
-Analiza pliku \verb|.csv|, utworzonego podczas uruchamiania programu w C, polegała na kilku głównych etapach. Po pierwsze - sposób analizy. Nasza analiza skupiała sie głównie na sprawdzaniu, kiedy jest wykonywany tzw. *skok*, czyli wykonanie operacji modulo. Na początku tworzymy więc tabelę z wszystkimi możliwymi współczynnikami oraz kiedy będą przechodzić do tej operacji. Tablica ta ma rozmiar $Q \times Q$, a zapisywane są do niej liczba $1$ jeśli skok został wykonany lub $0$ jesli owego nie było.
+Analiza pliku `.csv`, utworzonego podczas uruchamiania programu w C, polegała na kilku głównych etapach. Po pierwsze - sposób analizy. Nasza analiza skupiała sie głównie na sprawdzaniu, kiedy jest wykonywany tzw. *skok*, czyli wykonanie operacji modulo. Na początku tworzymy więc tabelę z wszystkimi możliwymi współczynnikami oraz kiedy będą przechodzić do tej operacji. Tablica ta ma rozmiar $Q \times Q$, a zapisywane są do niej liczba $1$ jeśli skok został wykonany lub $0$ jesli owego nie było.
 
 Kolejnym krokiem była analiza danych z pliku. Aktualnie, dzięki dużym różnicom w wykonaniu się funkcji z oraz bez modulo, działamy wyłącznie na medianie oraz różnicy median z kolejnych liczb. Dzięki temu możemy zaobserwować skoki.
 
