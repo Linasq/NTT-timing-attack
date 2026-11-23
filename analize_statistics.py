@@ -57,7 +57,7 @@ def pff(tab, jumps):
             if tab[i] == cos:
                 score_dict[j] += 1
 
-    print(f'Nasz super tajny fspułczynnik: {max(score_dict, key=score_dict.get)}')
+    print(f'Odzyskany współczynnik: {max(score_dict, key=score_dict.get)}')
 
 
 
