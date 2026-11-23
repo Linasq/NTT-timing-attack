@@ -20,3 +20,13 @@ Kolejnym krokiem była analiza danych z pliku. Aktualnie, dzięki dużym różni
 Następnie utworzyliśmy profil dla naszego analizowanego przypadku. Profilowanie polega na przypisaniu kolejnych wartości różnic do prostej, do której wybrany punkt ma bliżej. Występują dwie proste, odpowiednio $y=min(y)$ oraz $y=max(y)$, a reszta punktów *znajduje się w ich środku*. Dzięki temu otrzymamy profil danego współczynnika.
 
 Ostatnim krokiem jest sprawdzenie, do którego współczynnika z tablicy $Q \times Q$ wyliczony profil ma najbliżej. Dzięki temu otrzymujemy finalnie poprawny tajny współczynnik.
+
+## Jak uruchomić program
+
+Po pobraniu projektu z GitHuba, należy wykonać kilka dodatkowych czynności.
+
+1. Znajdując się w drzewie projektu - utworzyć folder `Q_tables`. W tym folderze znajduje się tablica poprawnych skoków, generowana przez skrypt Pythona. - `mkdir Q_tables`
+2. Kompilacja programu: `gcc -O0 -o NTT NTT_dilithium_stolen.c`. Użycie flagi `-O0` zapewni, że podczas kompilacji nie nastąpi żadna dodatkowa optymalizacja programu.
+3. Uruchomienie skompilowanego programu: `./NTT`. Program ten wygeneruje plik `.csv`
+4. Uruchomienie skryptu do analizy danych: `python3 analize_statistics.py`. Program ten wypisze odgadnięty współczynnik oraz aktualnie wyświetli wykresy z przebiegiem kolejnych czasów operacji. 
+
