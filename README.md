@@ -6,7 +6,7 @@ Naszym problemem badawczym będzie próba odzyskania wielomianu $s(x)$ znając w
 
 Stworzona przez nas funkcja mnożenia wielomianów w postaci NTT w C jest podatna na wyciek czasowy ze względu na sposób realizacji operacji modulo. Działanie to jest wykonywane poprzez odejmowanie $Q$ razy liczby $1$ aż współczynnik $c_i$ nie będzie należał do zbioru $\{0,1,2,3,\ldots,Q-1\}$.
 
-W celu zebrania danych do analizy przygotowaliśmy sekretny wielomian $s$, który w postaci NTT jest reprezentowany jako $s = [0,0,0,0,0,0,0,50]$. Następnie wykonywaliśmy mnożenie go przez wielomian $a$, który w postaci NTT jest reprezentowany jako $a_i = [0,0,0,0,0,0,0,i]$, gdzie $i \in \{0,1,,2,\ldots,Q-1\}$. Dla każdego $i$ wykonaliśmy mnożenie $a_i$ przez $s$ $10\_000$ razy.
+W celu zebrania danych do analizy przygotowaliśmy sekretny wielomian $s$, który w postaci NTT jest reprezentowany jako $s = [0,0,0,0,0,0,0,50]$. Następnie wykonywaliśmy mnożenie go przez wielomian $a$, który w postaci NTT jest reprezentowany jako $a_i = [0,0,0,0,0,0,0,i]$, gdzie $i \in \{0,1,,2,\ldots,Q-1\}$. Dla każdego $i$ wykonaliśmy mnożenie $a_i$ przez $s$ $10 000$ razy.
 
 Ze względu na mechanizmy optymalizacji wykonywania programów przez procesor (m.in spekulacyjne wykonywanie instrukcji (*speculative execution*), przwidywanie rozgałęzień programu (*branch predicton*)) musieliśmy zmniejszyć przewidywalność naszego kodu. 
 W tym celu kolejne wartości $i$ potrzebne w wielomianie $a_i$ wybieramy z tablicy, która została uprzednio wymieszana. Ponadto po każdym wykonaniu mnożenia losujemy liczbę. Dzięki temu uniemożliwiamy procesorowi przewidywanie dalszych kroków programu.
@@ -26,7 +26,8 @@ Ostatnim krokiem jest sprawdzenie, do którego współczynnika z tablicy $Q \tim
 Po pobraniu projektu z GitHuba, należy wykonać kilka dodatkowych czynności.
 
 1. Znajdując się w drzewie projektu - utworzyć folder `Q_tables`. W tym folderze znajduje się tablica poprawnych skoków, generowana przez skrypt Pythona. - `mkdir Q_tables`
-2. Kompilacja programu: `gcc -O0 -o NTT NTT_dilithium_stolen.c`. Użycie flagi `-O0` zapewni, że podczas kompilacji nie nastąpi żadna dodatkowa optymalizacja programu.
-3. Uruchomienie skompilowanego programu: `./NTT`. Program ten wygeneruje plik `.csv`
-4. Uruchomienie skryptu do analizy danych: `python3 analize_statistics.py`. Program ten wypisze odgadnięty współczynnik oraz aktualnie wyświetli wykresy z przebiegiem kolejnych czasów operacji. 
+2. Utworzyć folder `multiply_results`. Ten folder zawiera wyniki pomiaru czasu dla każdego współczynnika $s$.
+3. Kompilacja programu: `gcc -O0 -o NTT NTT_dilithium_stolen.c`. Użycie flagi `-O0` zapewni, że podczas kompilacji nie nastąpi żadna dodatkowa optymalizacja programu.
+4. Uruchomienie skompilowanego programu: `./NTT`. Program ten wygeneruje plik `.csv`
+5. Uruchomienie skryptu do analizy danych: `python3 analize_statistics.py`. Program ten wypisze odgadnięty współczynnik oraz aktualnie wyświetli wykresy z przebiegiem kolejnych czasów operacji. 
 
